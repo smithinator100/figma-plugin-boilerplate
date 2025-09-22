@@ -2,17 +2,18 @@
 
 Minimal two-step setup.
 
-### 1) Copy–paste this into Cursor’s Terminal
+### 1) Quick install (one command)
 ```bash
-chmod +x create-plugin.sh && ./create-plugin.sh "My Figma Plugin"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/smithinator100/figma-plugin-boilerplate/main/install.sh)"
 ```
-- Replace "My Figma Plugin" with your desired name.
+- You’ll be prompted for your plugin name.
 
 ### 2) Use the generated Cursor rules
+- The installer automatically opens your new plugin in Cursor.
+- If it doesn’t, run:
 ```bash
-cd "My Figma Plugin" && open -a "Cursor" .
+cd "<your plugin name>" && open -a "Cursor" .
 ```
-- Replace "My Figma Plugin" with the name you used above.
 - This opens the folder as a new Cursor workspace so `.cursorrules` is active.
 
 That’s it.
