@@ -1,7 +1,7 @@
 {
   "name": "figma-plugin-boilerplate",
   "version": "1.0.0",
-  "description": "A beautiful Figma plugin boilerplate with TypeScript, shadcn/ui styling, and vanilla JavaScript",
+  "description": "A beautiful Figma plugin boilerplate with vanilla JavaScript and shadcn/ui styling",
   "main": "dist/code.js",
   "scripts": {
     "build": "npm run clean && npm run build:main && npm run build:ui",
@@ -9,7 +9,7 @@
     "build:ui": "node build-ui.js",
     "dev": "npm run build && concurrently \"npm run dev:main\" \"npm run dev:ui\"",
     "dev:main": "tsc -p tsconfig.json --watch",
-    "dev:ui": "nodemon --watch src/ui.tsx --watch src/components --watch src/lib --ext tsx,ts --exec \"npm run build:ui\"",
+    "dev:ui": "nodemon --watch src/components --watch src/lib --ext js --exec \"npm run build:ui\"",
     "clean": "rimraf dist",
     "setup": "npm install && npm run build",
     "lint": "tsc --noEmit"
@@ -26,29 +26,16 @@
   "devDependencies": {
     "@figma/plugin-typings": "^1.90.0",
     "@types/node": "^20.11.0",
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.21",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
     "concurrently": "^9.2.1",
-    "esbuild": "^0.25.10",
-    "lucide-react": "^0.315.0",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.6",
     "rimraf": "^5.0.5",
-    "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.3.3"
   },
-  "dependencies": {
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-separator": "^1.0.3",
-    "@radix-ui/react-slot": "^1.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">=18.0.0"
   }

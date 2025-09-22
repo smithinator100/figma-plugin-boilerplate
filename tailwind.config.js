@@ -2,7 +2,8 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./src/**/*.{ts,tsx,html}",
+    "./src/**/*.{ts,tsx,js,html}",
+    "./build-ui.js",
   ],
   prefix: "",
   theme: {

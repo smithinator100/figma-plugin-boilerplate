@@ -2,6 +2,28 @@
 
 This file contains example plugin ideas and code snippets to help you get started building your Figma plugin.
 
+## 🚀 New Tabbed Interface Feature
+
+### Feature: Tabbed Plugin Interface
+The plugin now includes a modern tabbed interface with two main sections:
+
+#### Success Criteria:
+- ✅ Plugin tab displays description and rectangle generation functionality
+- ✅ UI tab shows comprehensive list of available shadcn/ui components
+- ✅ Tabs are fully functional with proper state management
+- ✅ Rectangle generation works from Plugin tab
+- ✅ UI components are properly documented in UI tab
+
+#### Test Steps:
+1. Load the plugin in Figma
+2. Verify "Plugin" tab is selected by default
+3. Click "Generate Rectangle" button - should create a blue rectangle
+4. Switch to "UI" tab - should show list of available components
+5. Switch back to "Plugin" tab - state should be preserved
+6. Verify all UI components are properly styled with shadcn/ui
+
+**Expected Result:** A fully functional tabbed interface that provides both plugin functionality and component documentation.
+
 ## 🎨 Design Tools
 
 ### Color Palette Generator

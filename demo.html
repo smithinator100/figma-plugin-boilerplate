@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shadcn/ui Vanilla JavaScript Components Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(214.3 31.8% 91.4%)",
+            input: "hsl(214.3 31.8% 91.4%)",
+            ring: "hsl(221.2 83.2% 53.3%)",
+            background: "hsl(0 0% 100%)",
+            foreground: "hsl(222.2 84% 4.9%)",
+            primary: {
+              DEFAULT: "hsl(221.2 83.2% 53.3%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            secondary: {
+              DEFAULT: "hsl(210 40% 96%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            destructive: {
+              DEFAULT: "hsl(0 84.2% 60.2%)",
+              foreground: "hsl(210 40% 98%)",
+            },
+            muted: {
+              DEFAULT: "hsl(210 40% 96%)",
+              foreground: "hsl(215.4 16.3% 46.9%)",
+            },
+            accent: {
+              DEFAULT: "hsl(210 40% 96%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+            card: {
+              DEFAULT: "hsl(0 0% 100%)",
+              foreground: "hsl(222.2 84% 4.9%)",
+            },
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-foreground">
+  <div class="container mx-auto p-8 max-w-4xl">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold mb-2">shadcn/ui Vanilla JavaScript Components</h1>
+      <p class="text-muted-foreground">Interactive demo of all components</p>
+    </div>
+
+    <!-- Demo Container -->
+    <div id="demo-container" class="space-y-8">
+      <!-- Components will be added here via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Load the standalone shadcn-ui library -->
+  <script src="./src/components/ui/shadcn-ui.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('demo-container');
+      
+      // Button Demo
+      const buttonSection = createDemoSection('Buttons', 'Various button variants and sizes');
+      const buttonGrid = document.createElement('div');
+      buttonGrid.className = 'grid grid-cols-2 md:grid-cols-3 gap-4';
+      
+      // Button variants
+      const buttonVariants = ['default', 'secondary', 'outline', 'destructive', 'ghost', 'link'];
+      buttonVariants.forEach(variant => {
+        const btn = ShadcnUI.createButton({
+          text: variant.charAt(0).toUpperCase() + variant.slice(1),
+          variant: variant,
+          onClick: () => showToast(`${variant} button clicked!`)
+        });
+        buttonGrid.appendChild(btn);
+      });
+      
+      // Button sizes
+      const sizeRow = document.createElement('div');
+      sizeRow.className = 'flex gap-2 items-center mt-4';
+      ['sm', 'default', 'lg'].forEach(size => {
+        const btn = ShadcnUI.createButton({
+          text: size === 'default' ? 'Default' : size.toUpperCase(),
+          size: size,
+          variant: 'outline'
+        });
+        sizeRow.appendChild(btn);
+      });
+      
+      buttonSection.appendChild(buttonGrid);
+      buttonSection.appendChild(sizeRow);
+      container.appendChild(buttonSection);
+      
+      // Card Demo
+      const cardSection = createDemoSection('Cards', 'Card components with different content');
+      const cardGrid = document.createElement('div');
+      cardGrid.className = 'grid md:grid-cols-2 gap-6';
+      
+      // Simple card
+      const simpleCard = ShadcnUI.createCard({
+        content: `
+          <div class="p-6">
+            <h3 class="text-lg font-semibold mb-2">Simple Card</h3>
+            <p class="text-muted-foreground">This is a simple card with basic content.</p>
+          </div>
+        `
+      });
+      cardGrid.appendChild(simpleCard);
+      
+      // Complex card with all sections
+      const complexCard = ShadcnUI.createCard();
+      const header = ShadcnUI.createCardHeader();
+      const title = ShadcnUI.createCardTitle({ text: 'Project Overview' });
+      const description = ShadcnUI.createCardDescription({ text: 'Track your project progress' });
+      const content = ShadcnUI.createCardContent({
+        content: `
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span>Completion</span>
+              <span class="font-semibold">75%</span>
+            </div>
+            <div class="w-full bg-secondary rounded-full h-2">
+              <div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+            </div>
+          </div>
+        `
+      });
+      
+      header.appendChild(title);
+      header.appendChild(description);
+      complexCard.appendChild(header);
+      complexCard.appendChild(content);
+      cardGrid.appendChild(complexCard);
+      
+      cardSection.appendChild(cardGrid);
+      container.appendChild(cardSection);
+      
+      // Input Demo
+      const inputSection = createDemoSection('Inputs', 'Form inputs with validation');
+      const inputGrid = document.createElement('div');
+      inputGrid.className = 'grid md:grid-cols-2 gap-4';
+      
+      // Text input
+      const textInput = ShadcnUI.createInput({
+        placeholder: 'Enter your name',
+        onChange: (e) => console.log('Name:', e.target.value)
+      });
+      
+      // Email input
+      const emailInput = ShadcnUI.createInput({
+        type: 'email',
+        placeholder: 'Enter your email',
+        className: 'invalid:border-destructive'
+      });
+      
+      inputGrid.appendChild(textInput);
+      inputGrid.appendChild(emailInput);
+      inputSection.appendChild(inputGrid);
+      container.appendChild(inputSection);
+      
+      // Badge Demo
+      const badgeSection = createDemoSection('Badges', 'Various badge styles and states');
+      const badgeContainer = document.createElement('div');
+      badgeContainer.className = 'flex flex-wrap gap-2';
+      
+      const badgeVariants = ['default', 'secondary', 'destructive', 'outline'];
+      badgeVariants.forEach(variant => {
+        const badge = ShadcnUI.createBadge({
+          text: variant.charAt(0).toUpperCase() + variant.slice(1),
+          variant: variant
+        });
+        badgeContainer.appendChild(badge);
+      });
+      
+      // Interactive badge
+      const interactiveBadge = ShadcnUI.createBadge({
+        text: 'Click me',
+        variant: 'secondary',
+        onClick: () => showToast('Badge clicked!')
+      });
+      badgeContainer.appendChild(interactiveBadge);
+      
+      badgeSection.appendChild(badgeContainer);
+      container.appendChild(badgeSection);
+      
+      // Alert Demo
+      const alertSection = createDemoSection('Alerts', 'Alert messages for different states');
+      const alertContainer = document.createElement('div');
+      alertContainer.className = 'space-y-4';
+      
+      // Default alert
+      const defaultAlert = ShadcnUI.createAlert({
+        content: '<strong>Info:</strong> This is an informational alert message.'
+      });
+      alertContainer.appendChild(defaultAlert);
+      
+      // Destructive alert
+      const errorAlert = ShadcnUI.createAlert({
+        variant: 'destructive',
+        content: '<strong>Error:</strong> Something went wrong with your request.'
+      });
+      alertContainer.appendChild(errorAlert);
+      
+      alertSection.appendChild(alertContainer);
+      container.appendChild(alertSection);
+      
+      // Separator Demo
+      const separatorSection = createDemoSection('Separators', 'Visual separators for content sections');
+      const separatorContainer = document.createElement('div');
+      separatorContainer.className = 'space-y-4';
+      
+      separatorContainer.innerHTML = `
+        <div>Content above separator</div>
+      `;
+      
+      const separator = ShadcnUI.createSeparator();
+      separatorContainer.appendChild(separator);
+      
+      const afterSeparator = document.createElement('div');
+      afterSeparator.textContent = 'Content below separator';
+      separatorContainer.appendChild(afterSeparator);
+      
+      separatorSection.appendChild(separatorContainer);
+      container.appendChild(separatorSection);
+      
+      // Tabs Demo
+      const tabsSection = createDemoSection('Tabs', 'Tabbed interface with keyboard navigation');
+      const tabsContainer = document.createElement('div');
+      tabsContainer.className = 'space-y-4';
+      
+      // Create tabs using the class
+      const tabs = new ShadcnUI.Tabs({ defaultValue: 'account' })
+        .addTabsList()
+        .addTab({
+          value: 'account',
+          label: 'Account',
+          content: `
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold">Account Settings</h3>
+              <p class="text-muted-foreground">Make changes to your account here. Click save when you're done.</p>
+              <div class="space-y-2">
+                <label class="text-sm font-medium">Name</label>
+                <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value="John Doe" />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium">Email</label>
+                <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value="john@example.com" />
+              </div>
+            </div>
+          `
+        })
+        .addTab({
+          value: 'password',
+          label: 'Password',
+          content: `
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold">Change Password</h3>
+              <p class="text-muted-foreground">Change your password here. After saving, you'll be logged out.</p>
+              <div class="space-y-2">
+                <label class="text-sm font-medium">Current Password</label>
+                <input type="password" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium">New Password</label>
+                <input type="password" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+              </div>
+            </div>
+          `
+        })
+        .addTab({
+          value: 'notifications',
+          label: 'Notifications',
+          content: `
+            <div class="space-y-4">
+              <h3 class="text-lg font-semibold">Notification Preferences</h3>
+              <p class="text-muted-foreground">Configure how you receive notifications.</p>
+              <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                  <input type="checkbox" id="email-notifs" class="rounded border-input" checked />
+                  <label for="email-notifs" class="text-sm font-medium">Email notifications</label>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <input type="checkbox" id="push-notifs" class="rounded border-input" />
+                  <label for="push-notifs" class="text-sm font-medium">Push notifications</label>
+                </div>
+              </div>
+            </div>
+          `
+        });
+      
+      tabsContainer.appendChild(tabs.getElement());
+      tabsSection.appendChild(tabsContainer);
+      container.appendChild(tabsSection);
+      
+      // Select Demo
+      const selectSection = createDemoSection('Select', 'Dropdown selection with search and keyboard navigation');
+      const selectContainer = document.createElement('div');
+      selectContainer.className = 'grid md:grid-cols-2 gap-4';
+      
+      // Framework select
+      const frameworkSelect = new ShadcnUI.Select({
+        placeholder: 'Select a framework...'
+      })
+        .addTrigger()
+        .addContent()
+        .addItem({ value: 'react', text: 'React' })
+        .addItem({ value: 'vue', text: 'Vue' })
+        .addItem({ value: 'angular', text: 'Angular' })
+        .addItem({ value: 'svelte', text: 'Svelte' })
+        .addItem({ value: 'solid', text: 'SolidJS' });
+      
+      frameworkSelect.onValueChange((e) => {
+        showToast(`Selected framework: ${e.detail.value}`, 'info');
+      });
+      
+      // Theme select
+      const themeSelect = new ShadcnUI.Select({
+        placeholder: 'Select theme...',
+        value: 'dark'
+      })
+        .addTrigger()
+        .addContent()
+        .addItem({ value: 'light', text: 'Light' })
+        .addItem({ value: 'dark', text: 'Dark' })
+        .addItem({ value: 'system', text: 'System' });
+      
+      themeSelect.onValueChange((e) => {
+        showToast(`Theme changed to: ${e.detail.value}`, 'info');
+      });
+      
+      // Wrapper divs for proper spacing
+      const frameworkWrapper = document.createElement('div');
+      frameworkWrapper.className = 'space-y-2';
+      frameworkWrapper.innerHTML = '<label class="text-sm font-medium">Framework</label>';
+      frameworkWrapper.appendChild(frameworkSelect.getElement());
+      
+      const themeWrapper = document.createElement('div');
+      themeWrapper.className = 'space-y-2';
+      themeWrapper.innerHTML = '<label class="text-sm font-medium">Theme</label>';
+      themeWrapper.appendChild(themeSelect.getElement());
+      
+      selectContainer.appendChild(frameworkWrapper);
+      selectContainer.appendChild(themeWrapper);
+      selectSection.appendChild(selectContainer);
+      container.appendChild(selectSection);
+      
+      // Interactive Demo
+      const interactiveSection = createDemoSection('Interactive Demo', 'Try the components in action');
+      const interactiveCard = ShadcnUI.createCard();
+      
+      const interactiveContent = document.createElement('div');
+      interactiveContent.className = 'p-6 space-y-4';
+      
+      // Form elements
+      const nameInput = ShadcnUI.createInput({
+        placeholder: 'Your name',
+        className: 'mb-2'
+      });
+      
+      const emailInput2 = ShadcnUI.createInput({
+        type: 'email',
+        placeholder: 'Your email',
+        className: 'mb-4'
+      });
+      
+      const submitBtn = ShadcnUI.createButton({
+        text: 'Submit Form',
+        variant: 'default',
+        className: 'w-full',
+        onClick: () => {
+          const name = nameInput.value;
+          const email = emailInput2.value;
+          
+          if (!name || !email) {
+            showToast('Please fill in all fields', 'error');
+            return;
+          }
+          
+          showToast(`Form submitted! Name: ${name}, Email: ${email}`, 'success');
+          nameInput.value = '';
+          emailInput2.value = '';
+        }
+      });
+      
+      interactiveContent.appendChild(nameInput);
+      interactiveContent.appendChild(emailInput2);
+      interactiveContent.appendChild(submitBtn);
+      
+      interactiveCard.appendChild(interactiveContent);
+      interactiveSection.appendChild(interactiveCard);
+      container.appendChild(interactiveSection);
+    });
+    
+    function createDemoSection(title, description) {
+      const section = document.createElement('div');
+      section.className = 'space-y-4';
+      
+      const header = document.createElement('div');
+      header.innerHTML = `
+        <h2 class="text-2xl font-semibold">${title}</h2>
+        <p class="text-muted-foreground">${description}</p>
+      `;
+      
+      section.appendChild(header);
+      return section;
+    }
+    
+    function showToast(message, type = 'info') {
+      // Simple toast implementation
+      const toast = document.createElement('div');
+      toast.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ${
+        type === 'error' ? 'bg-destructive text-destructive-foreground' :
+        type === 'success' ? 'bg-green-600 text-white' :
+        'bg-primary text-primary-foreground'
+      }`;
+      toast.textContent = message;
+      
+      document.body.appendChild(toast);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
