@@ -1,0 +1,173 @@
+# Figma Plugin Development Rules
+
+You are an expert in Figma Plugin development, TypeScript, React, and the Figma Plugin API.
+
+## Core Principles
+
+- Always reference the official Figma Plugin API documentation: https://www.figma.com/plugin-docs/
+- Write type-safe TypeScript code using the @figma/plugin-typings package
+- Follow Figma's plugin development best practices and security guidelines
+- Use React with shadcn/ui components for the plugin UI
+- Ensure proper separation between plugin sandbox code and UI code
+
+## Figma Plugin Architecture
+
+### Plugin Structure
+- `manifest.json`: Plugin configuration and permissions
+- `code.js/ts`: Main plugin code (runs in Figma's sandbox)
+- `ui.html`: Plugin UI entry point (runs in iframe)
+- Plugin code and UI communicate via `postMessage` API
+
+### Code Context Separation
+- **Plugin Code (code.ts)**: Has access to Figma API, no DOM access, no external APIs
+- **UI Code (ui.tsx)**: Has DOM access, no direct Figma API access, communicates via messages
+
+## Figma Plugin API Guidelines
+
+### Node Operations
+- Always check if nodes exist before operating on them
+- Use proper node types (Rectangle, Ellipse, Text, Frame, etc.)
+- Handle selection changes properly with `figma.on('selectionchange')`
+- Use `figma.currentPage.selection` for current selection
+
+### Message Communication
+```typescript
+// Plugin to UI
+figma.ui.postMessage({ type: 'action', data: {} });
+
+// UI to Plugin  
+parent.postMessage({ pluginMessage: { type: 'action', data: {} } }, '*');
+```
+
+### Node Creation and Manipulation
+```typescript
+// Create nodes
+const rect = figma.createRectangle();
+rect.resize(100, 100);
+rect.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 } }];
+
+// Add to page
+figma.currentPage.appendChild(rect);
+figma.currentPage.selection = [rect];
+```
+
+### Common Patterns
+- Always handle async operations properly
+- Use `figma.closePlugin()` to close the plugin
+- Check permissions before accessing certain APIs
+- Handle errors gracefully with try-catch blocks
+
+## TypeScript & Type Safety
+
+### Type Definitions
+- Use `@figma/plugin-typings` for official Figma types
+- Extend types in `src/types/figma.d.ts` as needed
+- Always type message payloads between plugin and UI
+
+### Example Message Types
+```typescript
+interface PluginMessage {
+  type: 'create-rectangle' | 'get-selection' | 'close-plugin';
+  data?: any;
+}
+
+interface UIMessage {
+  type: 'rectangle-created' | 'selection-data';
+  data: any;
+}
+```
+
+## UI Development with React & shadcn/ui
+
+### Component Structure
+- Use functional components with TypeScript interfaces
+- Prefer React hooks for state management
+- Use shadcn/ui components for consistent design
+- Follow responsive design principles
+
+### Styling Guidelines
+- Use Tailwind CSS with shadcn/ui
+- Follow Figma's design system principles
+- Ensure accessibility with proper ARIA labels
+- Test UI at different plugin window sizes
+
+## Performance & Best Practices
+
+### Plugin Performance
+- Minimize operations in the main thread
+- Batch operations when possible
+- Use `figma.skipInvisibleInstanceChildren = true` for large documents
+- Avoid deep recursion in node traversal
+
+### Memory Management
+- Clean up event listeners on plugin close
+- Avoid memory leaks in message handling
+- Use WeakMap/WeakSet for node references
+
+### Security
+- Validate all incoming messages
+- Sanitize user inputs
+- Never trust data from external sources
+- Follow principle of least privilege
+
+## Development Workflow
+
+### Building & Testing
+- Use `npm run dev` for development with hot reload
+- Test plugin in Figma's development environment
+- Use `npm run build` for production builds
+- Validate manifest.json before publishing
+
+### Debugging
+- Use `console.log()` in plugin code (shows in DevTools)
+- Use browser DevTools for UI debugging
+- Check Figma's plugin console for errors
+- Test edge cases and error scenarios
+
+## API Reference Quick Guide
+
+### Common Figma API Methods
+- `figma.createRectangle()`, `figma.createEllipse()`, `figma.createText()`
+- `figma.group(nodes, parent)`, `figma.flatten(nodes, parent)`
+- `figma.getNodeById(id)`, `figma.root`, `figma.currentPage`
+- `figma.viewport.scrollAndZoomIntoView(nodes)`
+- `figma.notify(message, options)`
+
+### Node Properties
+- `node.x`, `node.y`, `node.width`, `node.height`
+- `node.rotation`, `node.visible`, `node.locked`
+- `node.fills`, `node.strokes`, `node.effects`
+- `node.name`, `node.id`, `node.type`, `node.parent`
+
+### Selection & Navigation
+- `figma.currentPage.selection`
+- `figma.currentPage.findAll(callback)`
+- `figma.currentPage.findOne(callback)`
+- `node.children`, `node.parent`
+
+## Documentation References
+
+Always reference these official resources:
+- Figma Plugin API: https://www.figma.com/plugin-docs/api/
+- Plugin Manifest: https://www.figma.com/plugin-docs/manifest/
+- Plugin UI: https://www.figma.com/plugin-docs/creating-ui/
+- Publishing Guidelines: https://www.figma.com/plugin-docs/publishing-plugins/
+
+## Error Handling
+
+```typescript
+try {
+  // Figma API operations
+  const selection = figma.currentPage.selection;
+  if (selection.length === 0) {
+    figma.notify('Please select at least one object');
+    return;
+  }
+  // ... operations
+} catch (error) {
+  console.error('Plugin error:', error);
+  figma.notify('An error occurred. Please try again.', { error: true });
+}
+```
+
+When developing Figma plugins, always prioritize user experience, performance, and following Figma's official guidelines and API documentation.
