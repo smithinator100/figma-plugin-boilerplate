@@ -97,11 +97,10 @@ fi
 
 echo "✅ Plugin '$PLUGIN_NAME' created successfully at: $ORIG_DIR/$PLUGIN_NAME"
 
-# Open in Cursor (macOS)
-if command -v open >/dev/null 2>&1; then
-  echo "🧭 Opening in Cursor..."
-  cd "$ORIG_DIR/$PLUGIN_NAME" && open -a "Cursor" .
-else
-  echo "👉 Open the project manually: cd \"$ORIG_DIR/$PLUGIN_NAME\" && Cursor ."
-fi
+# Instructions for opening in Cursor
+echo "👉 To open in your current Cursor workspace:"
+echo "   File → Add Folder to Workspace → Select: $ORIG_DIR/$PLUGIN_NAME"
+echo ""
+echo "   Or open in a new window:"
+echo "   cd \"$ORIG_DIR/$PLUGIN_NAME\" && cursor ."
 

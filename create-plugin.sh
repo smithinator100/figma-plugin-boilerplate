@@ -70,13 +70,7 @@ else
   exit 1
 fi
 
-# Initialize git repository
-if command -v git >/dev/null 2>&1; then
-  echo "🔧 Initializing git repository..."
-  git init >/dev/null 2>&1 || true
-  git add . >/dev/null 2>&1 || true
-  git commit -m "Initial commit: Figma plugin boilerplate" >/dev/null 2>&1 || true
-fi
+# Note: Git repository initialization removed - users can initialize manually if needed
 
 echo ""
 echo "✅ Plugin '$PLUGIN_NAME' created successfully!"
