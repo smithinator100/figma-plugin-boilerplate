@@ -19,29 +19,47 @@ if [ -d "$PLUGIN_NAME" ]; then
 fi
 
 mkdir "$PLUGIN_NAME"
-cd "$PLUGIN_NAME"
 
-# Copy boilerplate files
+# Copy boilerplate files excluding git and scripts themselves
 echo "📋 Copying boilerplate files..."
-cp -r "$BOILERPLATE_DIR"/* . 2>/dev/null || true
-cp -r "$BOILERPLATE_DIR"/.[^.]* . 2>/dev/null || true
+if command -v rsync >/dev/null 2>&1; then
+  rsync -a --exclude ".git" --exclude ".gitignore" --exclude "node_modules" \
+        --exclude "install.sh" --exclude "create-plugin.sh" --exclude "*.log" \
+        --exclude "tmp" --exclude "*.DS_Store" "$BOILERPLATE_DIR/" "$PLUGIN_NAME/"
+else
+  # Fallback to cp; may include extra files
+  cp -R "$BOILERPLATE_DIR"/* "$PLUGIN_NAME/" 2>/dev/null || true
+  cp -R "$BOILERPLATE_DIR"/.[^.]* "$PLUGIN_NAME/" 2>/dev/null || true
+  rm -rf "$PLUGIN_NAME/.git" "$PLUGIN_NAME/node_modules" 2>/dev/null || true
+  rm -f "$PLUGIN_NAME/install.sh" "$PLUGIN_NAME/create-plugin.sh" 2>/dev/null || true
+fi
+
+cd "$PLUGIN_NAME"
 
 # Update manifest.json with plugin name
 echo "🔧 Updating plugin configuration..."
 if command -v sed >/dev/null 2>&1; then
   sed -i.bak "s/\"name\": \"Figma Plugin Boilerplate\"/\"name\": \"$PLUGIN_NAME\"/" manifest.json
-  sed -i.bak "s/\"id\": \"figma-plugin-boilerplate\"/\"id\": \"$(echo $PLUGIN_NAME | tr '[:upper:]' '[:lower:]' | tr ' ' '-')\"/" manifest.json
-  rm manifest.json.bak
+  sed -i.bak "s/\"id\": \"figma-plugin-boilerplate\"/\"id\": \"$(echo "$PLUGIN_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')\"/" manifest.json
+  rm -f manifest.json.bak
 fi
 
 # Update package.json
 if command -v sed >/dev/null 2>&1; then
-  sed -i.bak "s/\"name\": \"figma-plugin-boilerplate\"/\"name\": \"$(echo $PLUGIN_NAME | tr '[:upper:]' '[:lower:]' | tr ' ' '-')\"/" package.json
-  sed -i.bak "s/\"description\": \"A lightweight boilerplate for creating Figma plugins with React, TypeScript, and shadcn\/ui\"/\"description\": \"A Figma plugin built with React, TypeScript, and shadcn\/ui\"/" package.json
-  rm package.json.bak
+  sed -i.bak "s/\"name\": \"figma-plugin-boilerplate\"/\"name\": \"$(echo "$PLUGIN_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')\"/" package.json
+  sed -i.bak "s/\"description\": \"A lightweight boilerplate for creating Figma plugins with React, TypeScript, and shadcn\\/ui\"/\"description\": \"A Figma plugin built with React, TypeScript, and shadcn\\/ui\"/" package.json
+  rm -f package.json.bak
 fi
 
-# Install dependencies
+# Ensure tsconfig has Figma typings enabled
+if command -v sed >/dev/null 2>&1; then
+  if ! grep -q '"types"\s*:\s*\["@figma/plugin-typings"\]' tsconfig.json 2>/dev/null; then
+    sed -i.bak 's/"typeRoots"\s*:\s*\[[^]]*\]/&,\n    "types": ["@figma\/plugin-typings"]/g' tsconfig.json || true
+    rm -f tsconfig.json.bak
+  fi
+fi
+
+# Install dependencies and build
 echo "📦 Installing dependencies..."
 if command -v npm >/dev/null 2>&1; then
   npm install
@@ -55,9 +73,9 @@ fi
 # Initialize git repository
 if command -v git >/dev/null 2>&1; then
   echo "🔧 Initializing git repository..."
-  git init
-  git add .
-  git commit -m "Initial commit: Figma plugin boilerplate"
+  git init >/dev/null 2>&1 || true
+  git add . >/dev/null 2>&1 || true
+  git commit -m "Initial commit: Figma plugin boilerplate" >/dev/null 2>&1 || true
 fi
 
 echo ""

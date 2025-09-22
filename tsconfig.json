@@ -13,8 +13,9 @@
     "declaration": false,
     "outDir": "./dist",
     "rootDir": "./src",
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": ["@figma/plugin-typings"]
   },
-  "include": ["src/code.ts"],
+  "include": ["src/code.ts", "src/types/**/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

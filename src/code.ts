@@ -1,5 +1,7 @@
 // This file runs in the Figma plugin sandbox
 // It has access to the Figma API but no access to the DOM or external APIs
+/// <reference types="@figma/plugin-typings" />
+/// <reference path="./types/figma.d.ts" />
 
 console.log('Figma Plugin Boilerplate loaded');
 
@@ -11,7 +13,7 @@ figma.showUI(__html__, {
 });
 
 // Handle messages from the UI
-figma.ui.onmessage = (msg) => {
+figma.ui.onmessage = (msg: any) => {
   console.log('Received message from UI:', msg);
 
   switch (msg.type) {
@@ -59,7 +61,7 @@ function createRectangle() {
 function getSelection() {
   const selection = figma.currentPage.selection;
   
-  const selectionData = selection.map(node => ({
+  const selectionData = selection.map((node: any) => ({
     id: node.id,
     name: node.name,
     type: node.type,
