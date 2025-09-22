@@ -1,14 +1,12 @@
 ## Figma Plugin Boilerplate
 
-A complete Figma plugin starter with React, TypeScript, and shadcn/ui components pre-configured.
+A simple Figma plugin starter with TypeScript and basic UI components. **Simplified build process with TypeScript only - no Vite complexity.**
 
 ### Features
-- ⚡ **React + TypeScript** - Modern development stack
-- 🎨 **shadcn/ui Components** - Pre-installed and configured
-- 🎯 **Figma Plugin API** - Ready-to-use plugin structure
-- 🔧 **Development Tools** - ESLint, hot reload, and build scripts
-- 🤖 **Cursor IDE Ready** - Pre-configured with Figma plugin development rules
-- 🚀 **Auto-Start Server** - Development server starts automatically after installation
+- ⚡ **TypeScript Only** - Simple, fast build process
+- 🎯 **Figma Plugin API** - Ready-to-use plugin structure following official documentation
+- 🔧 **Clean Build** - No duplicate folders or complex bundling
+- 🚀 **Quick Development** - Simple npm scripts
 - 📦 **Zero Configuration** - Everything works out of the box
 
 ### Quick Start
@@ -43,56 +41,33 @@ The project includes `.cursorrules` with expert Figma plugin development guidanc
 Just open the project in Cursor and you'll have intelligent assistance!
 
 ### What's Included
-- **React + TypeScript** setup with proper configurations
-- **shadcn/ui components** (Button, Card, Badge, Separator) pre-installed
-- **Tailwind CSS** with shadcn/ui design tokens
+- **TypeScript** setup with proper configurations
+- **Simple UI** with inline styling (no complex bundling)
 - **Figma Plugin API** typings and boilerplate code
-- **Development scripts** for building and hot reload
-- **ESLint** configuration for code quality
-- **Path aliases** (`@/`) for clean imports
-- **Cursor IDE rules** (`.cursorrules`) for intelligent development assistance
+- **Development scripts** for building and watching
+- **Clean build output** - just `code.js` and `ui.html`
 
 ### Project Structure
 ```
-your-plugin-name/
+figma-plugin-boilerplate/
 ├── src/
 │   ├── code.ts              # Main plugin code (Figma API)
-│   ├── ui.tsx               # React UI components
-│   ├── ui.html              # UI entry point
-│   ├── components/ui/       # shadcn/ui components
-│   └── lib/utils.ts         # Utility functions
+│   ├── ui.html              # UI entry point  
+│   ├── ui.css               # Basic styles
+│   └── types/figma.d.ts     # Type definitions
+├── dist/                    # Built files (generated)
+│   ├── code.js              # Compiled plugin code
+│   └── ui.html              # Final UI with inline JS/CSS
 ├── manifest.json            # Plugin manifest
-├── components.json          # shadcn/ui configuration
+├── build-ui.js              # Simple UI build script
 └── package.json            # Dependencies and scripts
 ```
 
 ### Development Commands
 ```bash
-npm run dev          # Start development with hot reload
-npm run build        # Build for production
-npm run type-check   # Check TypeScript types
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues
+npm run build        # Build plugin (code.js + ui.html)
+npm run dev          # Build and watch for changes
+npm run clean        # Clean dist folder
 ```
-
-### Adding More shadcn/ui Components
-The project is pre-configured with `components.json`, so you can easily add more components:
-```bash
-npx shadcn-ui@latest add dialog
-npx shadcn-ui@latest add input
-npx shadcn-ui@latest add select
-```
-
-### Success Criteria
-- ✅ Plugin name prompt works even with piped installation
-- ✅ New folder created with correct plugin name and ID
-- ✅ All dependencies installed and build completes successfully
-- ✅ Development server starts automatically after installation
-- ✅ shadcn/ui components pre-configured and ready to use
-- ✅ Cursor IDE rules included for intelligent development assistance
-- ✅ No git repository initialized (user controls version control)
-- ✅ Clean project without boilerplate artifacts
-
----
 
 Happy plugin development! 🎨✨
