@@ -91,6 +91,22 @@ interface UIMessage {
 - Ensure accessibility with proper ARIA labels
 - Test UI at different plugin window sizes
 
+### shadcn/ui Usage
+- Always use the installed shadcn/ui primitives from `src/components/ui` for plugin UI. Prefer composition over custom styling.
+- Import components via relative paths in UI files (e.g., `src/ui.tsx`):
+```tsx
+import { Button } from './components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card'
+import { Separator } from './components/ui/separator'
+import { Badge } from './components/ui/badge'
+import { cn } from './lib/utils'
+```
+- Extend styles using `className` and Tailwind utility classes; use the `cn` helper from `src/lib/utils.ts` to merge classes. Do not fork shadcn components.
+- Prefer component variants/props (e.g., `variant="outline"`, `size="sm"`) instead of bespoke classes when available.
+- Use `lucide-react` for icons to match the existing setup.
+- Adhere to theming tokens (`bg-background`, `text-foreground`, etc.) to keep dark/light modes consistent.
+- Build new reusable UI wrappers in `src/components/ui` only when patterns repeat; otherwise compose in feature components.
+
 ## Performance & Best Practices
 
 ### Plugin Performance
@@ -117,6 +133,25 @@ interface UIMessage {
 - Test plugin in Figma's development environment
 - Use `npm run build` for production builds
 - Validate manifest.json before publishing
+
+### Feature Implementation & Success Criteria
+- For every new or updated feature, add a success criteria test/checklist to verify it works end-to-end.
+- Document acceptance criteria and a short manual test in `EXAMPLES.md` (or add a small test file when feasible for UI helpers/utilities).
+- Validate at minimum:
+  - Plugin ↔ UI message types and payloads
+  - Figma node changes (creation, properties, selection updates)
+  - Error/edge cases and user notifications
+  - UI state (loading, disabled, variants) and visual result
+- Example template:
+```md
+#### Feature: <name>
+- Success criteria:
+  - <criterion 1>
+  - <criterion 2>
+- Test steps:
+  1) <step>
+  2) <expected result>
+```
 
 ### Debugging
 - Use `console.log()` in plugin code (shows in DevTools)
