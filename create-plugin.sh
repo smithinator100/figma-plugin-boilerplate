@@ -27,9 +27,13 @@ if command -v rsync >/dev/null 2>&1; then
         --exclude "install.sh" --exclude "create-plugin.sh" --exclude "*.log" \
         --exclude "tmp" --exclude "*.DS_Store" "$BOILERPLATE_DIR/" "$PLUGIN_NAME/"
 else
-  # Fallback to cp; may include extra files
-  cp -R "$BOILERPLATE_DIR"/* "$PLUGIN_NAME/" 2>/dev/null || true
-  cp -R "$BOILERPLATE_DIR"/.[^.]* "$PLUGIN_NAME/" 2>/dev/null || true
+  # Fallback to cp; copy files while excluding the target directory itself
+  for item in "$BOILERPLATE_DIR"/*; do
+    [ "$(basename "$item")" != "$PLUGIN_NAME" ] && cp -R "$item" "$PLUGIN_NAME/" 2>/dev/null || true
+  done
+  for item in "$BOILERPLATE_DIR"/.[^.]*; do
+    [ -e "$item" ] && [ "$(basename "$item")" != "$PLUGIN_NAME" ] && cp -R "$item" "$PLUGIN_NAME/" 2>/dev/null || true
+  done
   rm -rf "$PLUGIN_NAME/.git" "$PLUGIN_NAME/node_modules" 2>/dev/null || true
   rm -f "$PLUGIN_NAME/install.sh" "$PLUGIN_NAME/create-plugin.sh" 2>/dev/null || true
 fi
