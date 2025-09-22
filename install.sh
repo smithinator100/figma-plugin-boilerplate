@@ -97,10 +97,33 @@ fi
 
 echo "✅ Plugin '$PLUGIN_NAME' created successfully at: $ORIG_DIR/$PLUGIN_NAME"
 
-# Instructions for opening in Cursor
-echo "👉 To open in your current Cursor workspace:"
-echo "   File → Add Folder to Workspace → Select: $ORIG_DIR/$PLUGIN_NAME"
-echo ""
-echo "   Or open in a new window:"
-echo "   cd \"$ORIG_DIR/$PLUGIN_NAME\" && cursor ."
+# Change to the new directory and start the development server
+echo "🚀 Starting development server..."
+cd "$ORIG_DIR/$PLUGIN_NAME"
+
+# Start the dev server in the background and provide instructions
+echo "📂 Changed to plugin directory: $(pwd)"
+echo "🔥 Starting development mode..."
+
+# Check if we're in an interactive shell
+if [ -t 0 ]; then
+  echo ""
+  echo "👉 Development server will start now. Press Ctrl+C to stop."
+  echo "📚 Open Figma Desktop → Plugins → Development → Import plugin from manifest"
+  echo "   Select: $(pwd)/manifest.json"
+  echo ""
+  
+  # Start the dev server
+  npm run dev
+else
+  echo ""
+  echo "👉 To start development:"
+  echo "   cd \"$ORIG_DIR/$PLUGIN_NAME\""
+  echo "   npm run dev"
+  echo ""
+  echo "📚 To use in Figma:"
+  echo "   1. Open Figma Desktop App"
+  echo "   2. Go to Plugins → Development → Import plugin from manifest"
+  echo "   3. Select: $ORIG_DIR/$PLUGIN_NAME/manifest.json"
+fi
 

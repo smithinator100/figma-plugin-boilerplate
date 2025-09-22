@@ -7,6 +7,8 @@ A complete Figma plugin starter with React, TypeScript, and shadcn/ui components
 - 🎨 **shadcn/ui Components** - Pre-installed and configured
 - 🎯 **Figma Plugin API** - Ready-to-use plugin structure
 - 🔧 **Development Tools** - ESLint, hot reload, and build scripts
+- 🤖 **Cursor IDE Ready** - Pre-configured with Figma plugin development rules
+- 🚀 **Auto-Start Server** - Development server starts automatically after installation
 - 📦 **Zero Configuration** - Everything works out of the box
 
 ### Quick Start
@@ -16,21 +18,29 @@ A complete Figma plugin starter with React, TypeScript, and shadcn/ui components
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/smithinator100/figma-plugin-boilerplate/main/install.sh)"
 ```
 
-#### 2) Add to workspace (if needed)
-If you want to add the plugin to your current workspace:
-- **File → Add Folder to Workspace** → Select your plugin folder
+The installer will:
+- ✅ Prompt for your plugin name
+- ✅ Generate a complete plugin project
+- ✅ Install all dependencies and build
+- ✅ **Automatically start the development server** 🚀
 
-#### 3) Start developing
-```bash
-npm run dev          # Start development mode
-```
+#### 2) Import to Figma
+While the dev server is running:
+1. **Open Figma Desktop App**
+2. **Plugins → Development → Import plugin from manifest**
+3. **Select your `manifest.json` file** (path shown in terminal)
+4. **Run your plugin** from the Plugins menu
 
-Then in Figma:
-1. **Plugins → Development → Import plugin from manifest**
-2. Select your `manifest.json` file
-3. Run your plugin from the Plugins menu
+That's it! Your plugin is ready to develop! 🎉
 
-That's it! 🎉
+#### 3) Cursor IDE Integration
+The project includes `.cursorrules` with expert Figma plugin development guidance:
+- 🎯 Figma Plugin API patterns and best practices
+- ⚡ TypeScript + React development guidelines  
+- 🎨 shadcn/ui component usage patterns
+- 🔧 Plugin architecture and security guidelines
+
+Just open the project in Cursor and you'll have intelligent assistance!
 
 ### What's Included
 - **React + TypeScript** setup with proper configurations
@@ -40,6 +50,7 @@ That's it! 🎉
 - **Development scripts** for building and hot reload
 - **ESLint** configuration for code quality
 - **Path aliases** (`@/`) for clean imports
+- **Cursor IDE rules** (`.cursorrules`) for intelligent development assistance
 
 ### Project Structure
 ```
@@ -76,7 +87,9 @@ npx shadcn-ui@latest add select
 - ✅ Plugin name prompt works even with piped installation
 - ✅ New folder created with correct plugin name and ID
 - ✅ All dependencies installed and build completes successfully
+- ✅ Development server starts automatically after installation
 - ✅ shadcn/ui components pre-configured and ready to use
+- ✅ Cursor IDE rules included for intelligent development assistance
 - ✅ No git repository initialized (user controls version control)
 - ✅ Clean project without boilerplate artifacts
 
