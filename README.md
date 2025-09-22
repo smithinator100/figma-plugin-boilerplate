@@ -1,12 +1,14 @@
 ## Figma Plugin Boilerplate
 
-A simple Figma plugin starter with TypeScript and basic UI components. **Simplified build process with TypeScript only - no Vite complexity.**
+A beautiful Figma plugin starter with TypeScript, shadcn/ui styling, and vanilla JavaScript. **Clean build process with Tailwind CSS - no React complexity.**
 
 ### Features
-- ⚡ **TypeScript Only** - Simple, fast build process
+- ⚡ **Vanilla JavaScript** - Simple, fast, and compatible with Figma's environment
+- 🎨 **shadcn/ui Styling** - Beautiful, professional design system
+- 🎨 **Tailwind CSS** - Utility-first CSS framework with design tokens
 - 🎯 **Figma Plugin API** - Ready-to-use plugin structure following official documentation
-- 🔧 **Clean Build** - No duplicate folders or complex bundling
-- 🚀 **Quick Development** - Simple npm scripts
+- 🔧 **Clean Build** - Single HTML file with inlined styles and scripts
+- 🚀 **Quick Development** - Simple npm scripts with CSS compilation
 - 📦 **Zero Configuration** - Everything works out of the box
 
 ### Quick Start
@@ -40,26 +42,31 @@ The project includes `.cursorrules` with expert Figma plugin development guidanc
 
 Just open the project in Cursor and you'll have intelligent assistance!
 
+
 ### What's Included
 - **TypeScript** setup with proper configurations
-- **Simple UI** with inline styling (no complex bundling)
+- **shadcn/ui Design System** - Beautiful, accessible components using utility classes
+- **Tailwind CSS** with shadcn/ui design tokens and CSS variables
+- **Vanilla JavaScript** - No React complexity, just clean DOM manipulation
 - **Figma Plugin API** typings and boilerplate code
 - **Development scripts** for building and watching
-- **Clean build output** - just `code.js` and `ui.html`
+- **Clean build output** - single `ui.html` with inlined styles and scripts
 
 ### Project Structure
 ```
 figma-plugin-boilerplate/
 ├── src/
 │   ├── code.ts              # Main plugin code (Figma API)
-│   ├── ui.html              # UI entry point  
-│   ├── ui.css               # Basic styles
+│   ├── ui.html              # UI template
+│   ├── ui.css               # Tailwind CSS with shadcn/ui variables
 │   └── types/figma.d.ts     # Type definitions
 ├── dist/                    # Built files (generated)
 │   ├── code.js              # Compiled plugin code
-│   └── ui.html              # Final UI with inline JS/CSS
+│   └── ui.html              # Final UI with inline CSS/JS
 ├── manifest.json            # Plugin manifest
-├── build-ui.js              # Simple UI build script
+├── build-ui.js              # Tailwind + UI build script
+├── tailwind.config.js       # Tailwind configuration
+├── postcss.config.js        # PostCSS configuration
 └── package.json            # Dependencies and scripts
 ```
 
@@ -67,7 +74,55 @@ figma-plugin-boilerplate/
 ```bash
 npm run build        # Build plugin (code.js + ui.html)
 npm run dev          # Build and watch for changes
+npm run build:main   # Build only plugin code (TypeScript)
+npm run build:ui     # Build only UI (Tailwind CSS + vanilla JS)
 npm run clean        # Clean dist folder
 ```
+
+### shadcn/ui Components Available
+
+The plugin uses shadcn/ui design system with these beautiful components:
+
+- **Card** - Clean card layout with header, content, and proper spacing
+- **Button** - Multiple variants (primary, secondary, destructive, outline)
+- **Input** - Form inputs with proper focus states and validation styling
+- **Label** - Accessible form labels with proper typography
+- **Separator** - Clean horizontal dividers
+- **Badge** - Status indicators with different variants
+
+### Example UI Structure
+
+The vanilla JavaScript implementation creates a beautiful interface using shadcn/ui classes:
+
+```html
+<!-- shadcn/ui Card -->
+<div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+  <!-- Card Header -->
+  <div class="flex flex-col space-y-1.5 p-6">
+    <h3 class="text-xl font-semibold leading-none tracking-tight">
+      Plugin Title
+    </h3>
+  </div>
+  
+  <!-- Card Content -->
+  <div class="p-6 pt-0 space-y-4">
+    <!-- shadcn/ui Input -->
+    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+    
+    <!-- shadcn/ui Button -->
+    <button class="bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md">
+      Action Button
+    </button>
+  </div>
+</div>
+```
+
+### Key Benefits
+
+- **🎨 Beautiful Design** - Professional shadcn/ui styling out of the box
+- **⚡ Fast Performance** - No React overhead, just vanilla JavaScript
+- **🔧 Easy Customization** - Modify Tailwind classes directly in the build script
+- **🎯 Figma Compatible** - Tested to work perfectly in Figma's plugin environment
+- **📦 Single File Output** - Everything bundled into one HTML file
 
 Happy plugin development! 🎨✨

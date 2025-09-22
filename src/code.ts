@@ -18,7 +18,7 @@ figma.ui.onmessage = (msg: any) => {
 
   switch (msg.type) {
     case 'create-rectangle':
-      createRectangle();
+      createRectangle(msg.data);
       break;
 
     case 'get-selection':
@@ -34,11 +34,28 @@ figma.ui.onmessage = (msg: any) => {
   }
 };
 
-// Example function: Create a rectangle
-function createRectangle() {
+// Example function: Create a rectangle with custom properties
+function createRectangle(data: any) {
   const rect = figma.createRectangle();
   rect.resize(100, 100);
-  rect.fills = [{ type: 'SOLID', color: { r: 0.2, g: 0.6, b: 1 } }];
+  
+  // Set custom name if provided
+  if (data && data.name) {
+    rect.name = data.name;
+  }
+  
+  // Convert hex color to RGB if provided
+  if (data && data.color) {
+    const color = hexToRgb(data.color);
+    if (color) {
+      rect.fills = [{ type: 'SOLID', color }];
+    } else {
+      // Fallback to default color if hex conversion fails
+      rect.fills = [{ type: 'SOLID', color: { r: 0.2, g: 0.6, b: 1 } }];
+    }
+  } else {
+    rect.fills = [{ type: 'SOLID', color: { r: 0.2, g: 0.6, b: 1 } }];
+  }
   
   // Position the rectangle in the center of the viewport
   rect.x = figma.viewport.center.x - 50;
@@ -50,11 +67,27 @@ function createRectangle() {
   // Select the new rectangle
   figma.currentPage.selection = [rect];
   
+  // Zoom into view
+  figma.viewport.scrollAndZoomIntoView([rect]);
+  
   // Send success message to UI
   figma.ui.postMessage({
     type: 'rectangle-created',
     data: { id: rect.id, name: rect.name }
   });
+}
+
+// Helper function to convert hex color to RGB
+function hexToRgb(hex: string) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (result) {
+    return {
+      r: parseInt(result[1], 16) / 255,
+      g: parseInt(result[2], 16) / 255,
+      b: parseInt(result[3], 16) / 255
+    };
+  }
+  return null;
 }
 
 // Example function: Get current selection
